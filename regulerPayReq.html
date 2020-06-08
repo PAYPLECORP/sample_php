@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>Insert title here</title>
+<style>
+
+input {
+    width: 300px;
+    height: 20px;
+    border: 1px solid gray
+}
+</style>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready( function () {
+
+	// payReqSend
+	$('#PayRegulerAction').on('click', function (e) {
+
+		// set default
+		e.preventDefault();
+
+
+			var con = " 정기결제요청내역을 전송합니다. \n 진행하시겠습니까? ";
+
+			if (confirm(con) == true) {
+			
+    			var formData = new FormData($('#PayRegulerForm')[0]);
+    
+    			$.ajax({
+        			type : 'POST',
+        			cache : false,
+        			processData : false,
+        			contentType : false,
+        			async : false,
+        			url : '/cPayPayple/sample/payple_payRegulerSend.php',
+        			dataType : 'json',
+        			data : formData,
+    				success : function (data) {
+    				    console.log(data);
+    				    
+    					alert(data.PCD_PAY_MSG);
+    	
+    					var $_table = $("<table></table>");
+    					var table_data = "";
+    					
+    					$.each(data, function (key, value) {
+    						table_data += '<tr><td>'+key+'</td><td>: '+value+'</td><tr>';
+    					});
+    	
+    					$_table.append(table_data);
+    					
+    					$_table.appendTo('#payConfirmResult');
+    				
+    				},
+    				error : function (jqxhr, status, error) {
+    					console.log(jqxhr);
+    					
+    				    //alert(jqxhr.statusText + ",  " + status + ",   " + error);
+    				    //alert(jqxhr.status);
+    				    //alert(jqxhr.responseText);
+    				
+    				}
+    			});
+
+
+			} else {
+
+				return false;
+				
+			}
+
+		
+	});
+	
+});
+</script>
+</head>
+<body>
+<?
+$payer_id = "d0toSS9sT084bVJSNThScnFXQm9Gdz09";
+$buyer_no = 2335;
+$buyer_email = "test@payple.kr";
+$buy_goods = "휴대폰";
+$buy_total = "1000";
+$order_num = preg_replace("/([^0-9a-zA-Z]+)/", "", "test".microtime());
+?>
+	<form id="PayRegulerForm" name="PayRegulerForm">
+	  <input type="hidden" name="PCD_REGULER_FLAG" id="PCD_REGULER_FLAG" value="Y">
+	  <div>
+	    <label for="PCD_PAYER_ID">[간편정기결제] 페이플 결제자 ID</label>
+	    <input type="text" name="PCD_PAYER_ID" id="PCD_PAYER_ID" value="<?=$payer_id?>">
+	  </div>
+	  <div>
+	    <label for="PCD_PAYER_NO">구매자 고유번호</label>
+	    <input type="text" name="PCD_PAYER_NO" id="PCD_PAYER_NO" value="<?=$buyer_no?>">
+	  </div>
+	  <div>
+	    <label for="PCD_PAYER_EMAIL">구매자 Email</label>
+	    <input type="text" name="PCD_PAYER_EMAIL" id="PCD_PAYER_EMAIL" value="<?=$buyer_email?>">
+	  </div>
+	  <div>
+	    <label for="PCD_PAY_GOODS">구매상품</label>
+	    <input type="text" name="PCD_PAY_GOODS" id="PCD_PAY_GOODS" value="<?=$buy_goods?>">
+	  </div>	  
+	  <div>
+	  	<label for="PCD_PAY_TOTAL">결제금액</label>
+	  	<input type="text" name="PCD_PAY_TOTAL" id="PCD_PAY_TOTAL" value="<?=$buy_total?>">
+	  </div> 	  
+      <div>
+	  	<label for="PCD_PAY_ISTAX">과세여부</label>
+	  	<select id="PCD_PAY_ISTAX" name="PCD_PAY_ISTAX">
+	  		<option value="Y" selected>과세</option>
+	  		<option value="N">비과세</option>
+	  	</select>
+  	  </div> 
+      <div>
+  	    <label for="PCD_PAY_TAXTOTAL">부가세</label>
+  	    <input type="text" name="PCD_PAY_TAXTOTAL" id="PCD_PAY_TAXTOTAL" value="">
+      </div>
+	  <div>
+	  	<label for="PCD_PAY_OID">주문번호</label>
+	  	<input type="text" name="PCD_PAY_OID" id="PCD_PAY_OID" value="<?=$order_num?>">
+	  </div>
+	  <div>
+	  	<label for="PCD_PAY_YEAR">정기결제 구분년도</label>
+	  	<select id="PCD_PAY_YEAR" name="PCD_PAY_YEAR">
+	  	    <option value="">===</option>
+	  	    <?
+	  	    for ($i = date('Y'); $i > date('Y', strtotime('-4 YEARS')); $i--) {
+	  	    ?>
+	  	    <option value="<?=$i?>"><?=$i?></option>
+	  	    <?
+	  	    }
+	  	    ?>
+	  	</select>	  
+	  </div>
+	  <div>
+	  	<label for="PCD_PAY_MONTH">정기결제 구분월</label>
+	  	<select id="PCD_PAY_MONTH" name="PCD_PAY_MONTH">
+	  	    <option value="">===</option>
+	  		<option value="12">12</option>
+	  		<option value="11">11</option>
+	  		<option value="10">10</option>
+	  		<option value="9">9</option>
+	  		<option value="8">8</option>
+	  		<option value="7">7</option>
+	  		<option value="6">6</option>
+	  		<option value="5">5</option>
+	  		<option value="4">4</option>
+	  		<option value="3">3</option>
+	  		<option value="2">2</option>
+	  		<option value="1">1</option>	  		
+	  	</select>	  
+	  </div>
+	  <div>
+	  	<label for="PCD_TAXSAVE_FLAG">현금영수증</label>
+	  	<select id="PCD_TAXSAVE_FLAG" name="PCD_TAXSAVE_FLAG">
+	  		<option value="N">N</option>
+	  		<option value="Y">Y</option>
+	  	</select>
+	  </div>
+	  <div>
+	  	<label for="PCD_TAXSAVE_TRADE">현금영수증 발행타입</label>
+	  	<select id="PCD_TAXSAVE_TRADE" name="PCD_TAXSAVE_TRADE">
+	  		<option value="personal">소득공제</option>
+	  		<option value="company">지출증빙</option>
+	  	</select>
+	  </div>
+	  <div>
+	  	<label for="PCD_TAXSAVE_IDNUM">현금영수증 발행대상 번호</label>
+	  	<input type="text" id="PCD_TAXSAVE_IDNUM" name="PCD_TAXSAVE_IDNUM" value="">
+	  </div>
+	</form>
+    <button id="PayRegulerAction">정기결제요청</button>
+    
+    <div id='payConfirmResult'></div>
+</body>
+</html>

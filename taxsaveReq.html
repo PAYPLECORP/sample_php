@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>Insert title here</title>
+<style>
+.loader {
+  display: none;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('/img/spin.gif') 50% 40% no-repeat rgb(249,249,249);
+  opacity: 0.8;
+}
+
+input {
+    width: 300px;
+    height: 20px;
+    border: 1px solid gray
+}
+</style>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script>
+$(document).ready( function () {
+	
+	var TaxsaveFormReqAction = function () {
+
+		var formData = new FormData($('#TaxsaveForm')[0]);
+
+		$.ajax({
+			type : 'POST',
+			cache : false,
+			processData : false,
+			contentType : false,
+// 			async : false,
+			url : '/cPayPayple/sample/payple_TaxsaveReq.php',
+			dataType : 'json',
+			data : formData,
+			success : function (data) {
+			    console.log(data);
+			    
+				alert(data.PCD_PAY_MSG);
+
+				if (data.PCD_PAY_RST == 'success') {
+
+					var $_table = $("<table></table>");
+					var table_data = "";
+					
+					$.each(data, function (key, value) {
+						table_data += '<tr><td>'+key+'</td><td>: '+value+'</td><tr>';
+					});
+
+					$_table.append(table_data);
+					
+					$_table.appendTo('#taxsavereq_result');
+
+					$('#taxsavereq_result').css('display', '');
+
+				}
+    			
+			},
+			error : function (jqxhr, status, error) {
+				console.log(jqxhr);
+				
+			    alert(jqxhr.statusText + ",  " + status + ",   " + error);
+			    alert(jqxhr.status);
+			    alert(jqxhr.responseText);
+    			
+			},
+			complete : function () {
+				$('.loader').hide();
+			}
+		});
+
+		
+	};
+
+
+	$('#TaxsaveFormSubmit').on('click', function (event) {
+
+		event.preventDefault();
+
+		$('#taxsavereq_result').text('');
+		$('#taxsavereq_result').css('display', 'none');
+		
+		$(".loader").show();
+		
+		setTimeout(function () {
+			TaxsaveFormReqAction();
+		}, 500);
+		
+	});
+	
+	$('#PCD_TAXSAVE_REQUEST').on('change', function(){
+		if ($('#PCD_TAXSAVE_REQUEST').val() == 'cancel') {
+			$('#taxsave_amount').css('display', 'none');
+			$('#taxsave_taxtotal').css('display', 'none');
+			$('#reguler_flag').css('display', 'none');
+			$('#taxsave_tradeuse').css('display', 'none');
+			$('#taxsave_identinum').css('display', 'none');
+			$('#taxsave_email').css('display', 'none');
+		} else {
+			$('#taxsave_amount').css('display', '');
+			$('#taxsave_taxtotal').css('display', '');
+			$('#reguler_flag').css('display', '');
+			$('#taxsave_tradeuse').css('display', '');
+			$('#taxsave_identinum').css('display', '');
+			$('#taxsave_email').css('display', '');
+		}
+	})
+	
+	
+
+});
+</script>
+</head>
+<body>
+    <div id="loader" class="loader"></div>
+	<form id="TaxsaveForm" name="TaxsaveForm">
+	<div>
+	  	<label for="PCD_TAXSAVE_">요청</label>
+	  	<select id="PCD_TAXSAVE_REQUEST" name="PCD_TAXSAVE_REQUEST">
+	  	  <option value="regist">등록</option>
+	  	  <option value="cancel">취소</option>
+	  	</select>
+	  </div>
+	  <div>
+	  	<label for="PCD_PAY_OID">주문번호</label>
+	    <input type="text" name="PCD_PAY_OID" id="PCD_PAY_OID" value="" placeholder = "주문번호를 입력하세요." required>
+	  </div>
+	  <div id = taxsave_amount>
+	  	<label for="PCD_TAXSAVE_AMOUNT">신청금액</label>
+	    <input type="number" name="PCD_TAXSAVE_AMOUNT" id="PCD_TAXSAVE_AMOUNT" value=0 required>
+	  </div>
+	  <div id = taxsave_taxtotal>
+	  	<label for="PCD_TAXSAVE_TAXTOTAL">부가세</label>
+	    <input type="number" name="PCD_TAXSAVE_TAXTOTAL" id="PCD_TAXSAVE_TAXTOTAL" value=0 required>
+	  </div>
+	  <div id = "reguler_flag">
+	  	<label for="PCD_REGULER_FLAG">정기결제</label>
+	  	<select id="PCD_REGULER_FLAG" name="PCD_REGULER_FLAG">
+	  		<option value="N">N</option>
+	  		<option value="Y">Y</option>
+	  	</select>
+	  </div>
+	  <div id = "taxsave_tradeuse">
+	  	<label for="PCD_TAXSAVE_TRADEUSE">현금영수증 종류</label>
+	  	<select id="PCD_TAXSAVE_TRADEUSE" name="PCD_TAXSAVE_TRADEUSE">
+	  	  <option value="personal">소득공제</option>
+	  	  <option value="company">지출증빙</option>
+	  	</select>
+	  </div>
+	  <div id = "taxsave_identinum">
+	    <label for="PCD_TAXSAVE_IDENTINUM">증빙번호</label>
+	    <input type="number" name="PCD_TAXSAVE_IDENTINUM" id="PCD_TAXSAVE_IDENTINUM" value="" placeholder="휴대폰번호 or 사업자번호 (숫자만 입력하세요.)" required/>
+	  </div>
+	  <div id = "taxsave_email">
+	    <label for="PCD_TAXSAVE_EMAIL">이메일</label>
+	    <input type="email" name="PCD_TAXSAVE_EMAIL" id="PCD_TAXSAVE_EMAIL" value="" required>
+	  </div>
+	</form>
+    <button id="TaxsaveFormSubmit">요청</button>
+    <br>
+    <hr>
+    <div id="taxsavereq_result" style="display:none; border:1px solid black">
+    </div>
+</body>
+</html>

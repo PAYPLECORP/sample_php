@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>Insert title here</title>
+<style>
+.loader {
+  display: none;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('/img/spin.gif') 50% 40% no-repeat rgb(249,249,249);
+  opacity: 0.8;
+}
+
+input {
+    width: 300px;
+    height: 20px;
+    border: 1px solid gray
+}
+</style>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script>
+$(document).ready( function () {
+	
+	var cPayRefundFormReqAction = function () {
+
+		var formData = new FormData($('#cPayRefundForm')[0]);
+
+		$.ajax({
+			type : 'POST',
+			cache : false,
+			processData : false,
+			contentType : false,
+// 			async : false,
+			url : '/cPayPayple/sample/payple_cPayRefund.php',
+			dataType : 'json',
+			data : formData,
+			success : function (data) {
+			    console.log(data);
+			    
+				alert(data.PCD_PAY_MSG);
+
+				if (data.PCD_PAY_RST == 'success') {
+
+					var $_table = $("<table></table>");
+					var table_data = "";
+					
+					$.each(data, function (key, value) {
+						table_data += '<tr><td>'+key+'</td><td>: '+value+'</td><tr>';
+					});
+
+					$_table.append(table_data);
+					
+					$_table.appendTo('#cPayRefund_result');
+
+					$('#cPayRefund_result').css('display', '');
+
+				}
+
+				$(".loader").hide();
+    			
+			},
+			error : function (jqxhr, status, error) {
+				console.log(jqxhr);
+				
+			    alert(jqxhr.statusText + ",  " + status + ",   " + error);
+			    alert(jqxhr.status);
+			    alert(jqxhr.responseText);
+
+				$(".loader").hide();
+    			
+			}
+		});
+
+		
+	};
+
+
+	$('#cPayRefundFormSubmit').on('click', function (event) {
+
+		event.preventDefault();
+
+		$('#cPayRefund_result').text('');
+		$('#cPayRefund_result').css('display', 'none');
+		
+		$(".loader").show();
+		
+		setTimeout(function () {
+			cPayRefundFormReqAction();
+		}, 500);
+		
+	});
+
+});
+</script>
+</head>
+<body>
+    <div id="loader" class="loader"></div>
+	<form id="cPayRefundForm" name="cPayRefundForm">
+	  <div>
+	    <label for="PCD_PAY_OID">주문번호</label>
+	    <input type="text" name="PCD_PAY_OID" id="PCD_PAY_OID" value="" required>
+	  </div>
+	  <div>
+	  	<label for="PCD_REGULER_FLAG">정기결제여부</label>
+	    <select name="PCD_REGULER_FLAG" id="PCD_REGULER_FLAG">
+	    	<option value="N">일반</option>
+	    	<option value="Y">정기</option>
+	    </select>
+	  </div>
+	  <div>
+	  	<label for="PCD_PAY_YEAR">정기결제 구분년도</label>
+	  	<select name="PCD_PAY_YEAR" id="PCD_PAY_YEAR">
+	  	    <option value="">===</option>
+	  	    <option value="2019">2019</option>
+	  		<option value="2018">2018</option>
+	  		<option value="2017">2017</option>	  	
+	  	</select>
+	  </div>
+	  <div>
+	  	<label for="PCD_PAY_MONTH">정기결제 구분월</label>
+	  	<select name="PCD_PAY_MONTH" id="PCD_PAY_MONTH">
+	  	    <option value="">===</option>
+	  		<option value="12">12</option>
+	  		<option value="11">11</option>
+	  		<option value="10">10</option>
+	  		<option value="9">9</option>
+	  		<option value="8">8</option>
+	  		<option value="7">7</option>
+	  		<option value="6">6</option>
+	  		<option value="5">5</option>
+	  		<option value="4">4</option>
+	  		<option value="3">3</option>
+	  		<option value="2">2</option>
+	  		<option value="1">1</option>  
+	  	</select>
+	  </div>
+	  <div>
+	  	<label for="PCD_PAY_DATE">결제일자</label>
+	  	<input type="text" name="PCD_PAY_DATE" id="PCD_PAY_DATE" value="" required>
+	  </div>
+	  <div>
+	  	<label for="PCD_REFUND_TOTAL">환불요청금액 (미입력시 결제금액 전체 환불/취소)</label>
+	  	<input type="text" name="PCD_REFUND_TOTAL" id="PCD_REFUND_TOTAL" value="">
+	  </div>
+	</form>
+    <button id="cPayRefundFormSubmit">결제취소(환불) 요청</button>
+    <br>
+    <hr>
+    <div id="cPayRefund_result" style="display:none; border:1px solid black">
+    </div>
+</body>
+</html>
