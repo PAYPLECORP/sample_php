@@ -15,6 +15,11 @@ header("Content-type: application/json; charset=utf-8");
 $payple_dir_path = (isset($_POST['payple_dir_path'])) ? $_POST['payple_dir_path'] : "";
 //$payple_dir_path = "/pg/pay";
 
+// AWS 와 같은 클라우드 서버의 경우 REFERE 추가
+$CURLOPT_HTTPHEADER = array(
+    "referer: $SERVER_NAME"
+);
+
 // 발급받은 비밀키. 유출에 주의하시기 바랍니다.
 // payple_dir_path : cPayPayple 설치 경로
 $post_data = array (
@@ -28,6 +33,7 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_SSLVERSION, 4);
 curl_setopt($ch, CURLOPT_REFERER, $SERVER_NAME);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 
 ob_start();
