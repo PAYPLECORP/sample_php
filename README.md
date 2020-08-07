@@ -5,4 +5,4 @@
 
 ## Documentation
 
-[API docs](https://docs.payple.kr/) 보러가기
+[API DOCS](https://docs.payple.kr/) 보러가기
