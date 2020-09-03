@@ -31,20 +31,16 @@ try {
 	// cURL Header
 	$CURLOPT_HTTPHEADER = array(
 			"cache-control: no-cache",
-			"content-type: application/json; charset=UTF-8"
+			"content-type: application/json; charset=UTF-8",
+			"referer: https://$SERVER_NAME"
 	);
 	
 	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_POST, true);
-	
-	if ($REMOTE_ADDR != '127.0.0.1') {
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_SSLVERSION, 4);
-	}
-	
-	curl_setopt($ch, CURLOPT_REFERER, $SERVER_NAME);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
+    	curl_setopt($ch, CURLOPT_POST, true);
+    	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    	curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	
 	ob_start();
 	$AuthRes = curl_exec($ch);
@@ -104,16 +100,11 @@ try {
 	
 	//////////////////// cURL Data Send ////////////////////
 	$ch = curl_init($PayReqURL);
-	curl_setopt($ch, CURLOPT_POST, true);
-	
-	if ($REMOTE_ADDR != '127.0.0.1') {
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_SSLVERSION, 4);
-	}
-	
-	curl_setopt($ch, CURLOPT_REFERER, $SERVER_NAME);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
+    	curl_setopt($ch, CURLOPT_POST, true);
+    	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    	curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	
 	ob_start();
 	$PayRes = curl_exec($ch);
