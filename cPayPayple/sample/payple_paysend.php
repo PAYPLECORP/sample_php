@@ -59,15 +59,10 @@ try {
     //////////////////// cURL Data Send ////////////////////
     $ch = curl_init($PCD_PAY_COFURL);
     curl_setopt($ch, CURLOPT_POST, true);
-    
-    if ($REMOTE_ADDR != '127.0.0.1') {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSLVERSION, 4);
-    }
-    
-    curl_setopt($ch, CURLOPT_REFERER, $SERVER_NAME);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     
     ob_start();
     $PayRes = curl_exec($ch);
