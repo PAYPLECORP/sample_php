@@ -16,13 +16,15 @@ $payple_dir_path = (isset($_POST['payple_dir_path'])) ? $_POST['payple_dir_path'
 
 // AWS 와 같은 클라우드 서버의 경우 REFERE 추가
 $CURLOPT_HTTPHEADER = array(
-    "referer: $SERVER_NAME"
+    "cache-control: no-cache",
+    "content-type: application/json; charset=UTF-8",
+    "referer: https://test.aaa.com"
 );
 
 // 발급받은 비밀키. 유출에 주의하시기 바랍니다.
 // payple_dir_path : cPayPayple 설치 경로
 $post_data = array (
-	"cst_id" => $cst_id,
+    "cst_id" => $cst_id,
     "custKey" => $custKey
 );
     
@@ -30,10 +32,9 @@ $post_data = array (
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSLVERSION, 4);
-curl_setopt($ch, CURLOPT_REFERER, $SERVER_NAME);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 ob_start();
 $res = curl_exec($ch);
