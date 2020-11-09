@@ -40,7 +40,6 @@ try {
     	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
     	curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
-    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	
 	ob_start();
 	$AuthRes = curl_exec($ch);
