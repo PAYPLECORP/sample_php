@@ -34,7 +34,7 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
-//curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                 //  인증결과가 수신이 안되는 경우에 따라 주석해제
+
 
 ob_start();
 $res = curl_exec($ch);
