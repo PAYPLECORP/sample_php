@@ -24,7 +24,7 @@
     $ch = curl_init('https://testcpay.payple.kr/php/auth.php');
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSLVERSION, 4);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
 
