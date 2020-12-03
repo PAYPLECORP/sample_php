@@ -1,4 +1,5 @@
- /* 
+<?
+/* 
     * TEST : https://testcpay.payple.kr/php/auth.php
     * REAL : https://cpay.payple.kr/php/auth.php 
     */
@@ -39,3 +40,4 @@
     if($status_code == 200) {
         echo $buffer;
     }
+?>
