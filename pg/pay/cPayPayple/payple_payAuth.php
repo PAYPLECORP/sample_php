@@ -12,7 +12,7 @@
 
     //API를 받는 서버와 결제창 연동 서버가 다른 경우 또는 AWS 이용 가맹점인 경우 REFERER 에 도메인을 넣어주세요.
     $CURLOPT_HTTPHEADER = array(
-        "referer: http://localhost:80"
+        "referer: http://".$_SERVER['HTTP_HOST']
     );
 
     // 발급받은 비밀키. 유출에 주의하시기 바랍니다.
