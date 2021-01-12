@@ -5,7 +5,7 @@
 <br><br>
 ## Documentation
 <br>
-📂 **/payple/inc <br>
+📂 /payple/inc <br>
 [테스트 계정](http://docs.payple.kr/card/install/account)
 <br><br>
 👉 [API DOCS](https://docs.payple.kr/) 보러가기
