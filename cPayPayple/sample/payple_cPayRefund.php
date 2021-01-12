@@ -17,8 +17,8 @@ try {
 	
 	//발급받은 비밀키. 유출에 주의하시기 바랍니다.
 	$post_data = array (
-			"cst_id" => $cst_id,
-			"custKey" => $custKey,
+			"cst_id" => "test",
+			"custKey" => "abcd1234567890",
 			"PCD_PAYCANCEL_FLAG" => "Y"
 	);
 	
@@ -30,10 +30,10 @@ try {
     	$CURLOPT_HTTPHEADER = array(
         	"cache-control: no-cache",
         	"content-type: application/json; charset=UTF-8",
-        	"referer: https://$SERVER_NAME"
+        	"referer: http://$_SERVER[HTTP_HOST]"
     	);
     
-    	$ch = curl_init($url);
+    	$ch = curl_init("https://testcpay.payple.kr/php/auth.php");
     	curl_setopt($ch, CURLOPT_POST, true);
     	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
@@ -69,7 +69,7 @@ try {
 	$PCD_PAY_MONTH = (isset($_POST['PCD_PAY_MONTH'])) ? preg_replace("/([^0-9]+)/", "", $_POST['PCD_PAY_MONTH']) : "";	// 정기결제 구분 월 
 	$PCD_REFUND_TOTAL = (isset($_POST['PCD_REFUND_TOTAL'])) ? $_POST['PCD_REFUND_TOTAL'] : "";          				// 환불요청금액
 	$PCD_REFUND_TAXTOTAL = (isset($_POST['PCD_REFUND_TAXTOTAL'])) ? $_POST['PCD_REFUND_TAXTOTAL'] : "";          				// 환불요청금액
-	$PCD_REFUND_KEY = $refundKey;																						// 환불서비스 key
+	$PCD_REFUND_KEY = "a41ce010ede9fcbfb3be86b24858806596a9db68b79d138b147c3e563e1829a0";																						// 환불서비스 key
 	
 	
 	///////////////////////////////////////////////// 환불(승인취소)요청 전송 /////////////////////////////////////////////////
