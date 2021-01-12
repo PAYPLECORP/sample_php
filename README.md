@@ -5,7 +5,6 @@
 <br><br>
 ## Documentation
 
-📂 /payple/inc <br>
-  테스트 계정
+📂 /payple/inc 테스트 계정<br> 
 <br><br>
 👉 [API DOCS](https://docs.payple.kr/) 보러가기
