@@ -5,6 +5,7 @@
 <br><br>
 ## Documentation
 
-📂 /payple/inc 테스트 계정<br> 
+📂 payple/inc 테스트 계정<br> 
+📂 pg/pay/cPayPayple 가맹점 인증 파일<br> 
 <br><br>
 [API DOCS](https://docs.payple.kr/) 보러가기
