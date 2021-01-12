@@ -6,7 +6,7 @@
 ## Documentation
 
 📂 payple/inc 테스트 계정<br> 
-    [계정발급 방법](http://docs.payple.kr/card/install/account) <br>
+  [계정발급 방법](http://docs.payple.kr/card/install/account) <br>
 📂 pg/pay/cPayPayple 가맹점 인증 파일<br> 
 <br><br>
 [API DOCS](https://docs.payple.kr/) 보러가기
