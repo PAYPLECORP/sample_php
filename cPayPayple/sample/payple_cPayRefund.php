@@ -91,7 +91,6 @@ try {
 	);
 	
 	// content-type : application/json
-	// json_encoding...
 	$post_data = json_encode($pay_data);
 	
 	//////////////////// cURL Data Send ////////////////////
@@ -106,8 +105,6 @@ try {
 	$PayBuffer = ob_get_contents();
 	ob_end_clean();
 	
-	///////////////////////////////////////////////////////
-// 	print_r($PayBuffer);
 	
 	///////////////////////////////////////////////// 환불(승인취소) 요청 전송 /////////////////////////////////////////////////
 	// Converting To Object
@@ -147,7 +144,7 @@ try {
 		
 	}
 	
-	//
+	
 	$DATA = array(
 			"PCD_PAY_RST" => $pay_rst,
 			"PCD_PAY_MSG" => $pay_msg,
