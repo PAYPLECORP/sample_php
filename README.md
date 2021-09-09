@@ -7,26 +7,21 @@
 
 ## Documentation
 
-📂 payple/inc/config.inc 계정 관리 파일 ([계정발급 방법](https://developer.payple.kr/quick/account))<br>
+📂 payple/inc/**config.inc** 계정 관리 파일 ([계정발급 방법](https://developer.payple.kr/quick/account))<br>
+#### 결제연동
+>📂 **order.html :** 상품 주문<br>
+>📂 **order_confirm.html :**     주문확정 및 결제<br>
+>📂 **order_result.html :**      결제결과<br>
+#### 기타 API
+>📂 **linkReg :**           URL링크결제<br>
+>📂 **payCertSend :**       결제요청 재컨펌(CERT) 방식<br>
+>📂 **payInfo :**           결제결과 조회<br> 
+>📂 **payRefund :**          결제취소<br>
+>📂 **paySimpleCardSend :** 카드 정기결제 재결제<br>
+>📂 **paySimpleSend :**     계좌 정기결제 재결제<br>
+>📂 **payUserDel :**        등록해지<br>
+>📂 **payUserInfo :**       등록조회<br>
+>📂 **taxSaveReq :**        현금영수증 발행/취소<br>
 <br>
-### 결제연동
-📂 order.html             상품 주문<br>
-📂 order_confirm.html     주문확정 및 결제<br>
-📂 order_result.html      결제결과<br>
-<br><br>
-### API
-- cPayPayple : php 파일
-- html : html 파일
-</br>
-📂 linkReg           URL링크결제<br>
-📂 payCertSend       결제요청 재컨펌(CERT) 방식<br>
-📂 phpInfo           결제결과 조회<br> 
-📂 phpRefund         결제취소<br>
-📂 paySimpleCardSend 카드 정기결제 재결제<br>
-📂 paySimpleSend     계좌 정기결제 재결제<br>
-📂 payUserDel        등록해지<br>
-📂 payUserInfo       등록조회<br>
-📂 taxSaveReq        현금영수증 발행/취소<br>
-
-<br><br>
 🙋‍♀️[API DOCS](https://developer.payple.kr/) 보러가기
+
