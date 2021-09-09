@@ -186,27 +186,4 @@ try {
     $DATA = "{\"PCD_PAY_RST\":\"error\", \"PCD_PAY_MSG\":\"$message\"}";
 
     echo $DATA;
-
-    /*$errMsg = $e->getMessage();
-
-    $message = ($errMsg != '') ? $errMsg : "결제내역 조회 에러";
-
-    $DATA = array(
-        "PCD_PAY_RST" => "error",
-        "PCD_PAY_MSG" => "$message",
-        "PCD_PAY_OID" => "$pay_oid",
-        "PCD_PAY_TYPE" => "",
-        "PCD_PAY_YEAR" => "$pay_year",
-        "PCD_PAY_MONTH" => "$pay_month",
-        "PCD_PAY_GOODS" => "",
-        "PCD_PAY_TOTAL" => "",
-        "PCD_PAY_TIME" => "$pay_date",
-        "PCD_TAXSAVE_RST" => "",
-        "PCD_REGULER_FLAG" => "$reguler_flag"
-    );
-
-    $JSON_DATA = json_encode($DATA);
-
-    echo $JSON_DATA;
-    exit;*/
 }

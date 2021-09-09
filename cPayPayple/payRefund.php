@@ -97,13 +97,13 @@ try {
 	##################################################### 결제취소 요청 결과 #####################################################
 
 	# 1. 요청 결과 파라미터 모두 받기 - #2의 'exit;' 까지 모두 주석처리 후 사용
-	echo $payBuffer;
-	exit;
+	//echo $payBuffer;
+	//exit;
 
 
 	# 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정
 	// Converting To Object
-	/*$payResult = json_decode($payBuffer);
+	$payResult = json_decode($payBuffer);
 
 	if (isset($payResult->PCD_PAY_RST) && $payResult->PCD_PAY_RST != '') {
 		
@@ -147,7 +147,7 @@ try {
 	
 	echo $JSON_DATA;
 	
-	exit;*/
+	exit;
 	
 	
 } catch (Exception $e) {
