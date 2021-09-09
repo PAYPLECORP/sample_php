@@ -9,19 +9,19 @@
 
 📂 payple/inc/**config.inc** 계정 관리 파일 ([계정발급 방법](https://developer.payple.kr/quick/account))<br>
 #### 결제연동
->📂 **order.html :** 상품 주문<br>
->📂 **order_confirm.html :**     주문확정 및 결제<br>
->📂 **order_result.html :**      결제결과<br>
+>📂 **order.html &nbsp;:** &nbsp;상품 주문<br>
+>📂 **order_confirm.html &nbsp;:** &nbsp;주문확정 및 결제<br>
+>📂 **order_result.html &nbsp;:** &nbsp;결제결과<br>
 #### 기타 API
->📂 **linkReg :**           URL링크결제<br>
->📂 **payCertSend :**       결제요청 재컨펌(CERT) 방식<br>
->📂 **payInfo :**           결제결과 조회<br> 
->📂 **payRefund :**          결제취소<br>
->📂 **paySimpleCardSend :** 카드 정기결제 재결제<br>
->📂 **paySimpleSend :**     계좌 정기결제 재결제<br>
->📂 **payUserDel :**        등록해지<br>
->📂 **payUserInfo :**       등록조회<br>
->📂 **taxSaveReq :**        현금영수증 발행/취소<br>
+>📂 **linkReg &nbsp;:** &nbsp;URL링크결제<br>
+>📂 **payCertSend &nbsp;:** &nbsp;결제요청 재컨펌(CERT) 방식<br>
+>📂 **payInfo &nbsp;:** &nbsp;결제결과 조회<br> 
+>📂 **payRefund &nbsp;:** &nbsp;결제취소<br>
+>📂 **paySimpleCardSend &nbsp;:** &nbsp;카드 정기결제 재결제<br>
+>📂 **paySimpleSend &nbsp;:** &nbsp;계좌 정기결제 재결제<br>
+>📂 **payUserDel &nbsp;:** &nbsp;등록해지<br>
+>📂 **payUserInfo &nbsp;:** &nbsp;등록조회<br>
+>📂 **taxSaveReq &nbsp;:** &nbsp;현금영수증 발행/취소<br>
 <br>
 
 🙋‍ [페이플 API](https://developer.payple.kr) 보러가기
