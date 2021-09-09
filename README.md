@@ -23,5 +23,6 @@
 >📂 **payUserInfo :**       등록조회<br>
 >📂 **taxSaveReq :**        현금영수증 발행/취소<br>
 <br>
-🙋‍♀️[API DOCS](https://developer.payple.kr/) 보러가기
+
+🙋‍ [페이플 API](https://developer.payple.kr) 보러가기
 
