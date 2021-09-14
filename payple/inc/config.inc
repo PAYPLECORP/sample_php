@@ -2,7 +2,7 @@
 # 파트너 인증 URL과 페이플 계정(cst_id, custKey) 및 환불키(refundKey), SERVERNAME 관리
 
 //$url = "https://cpay.payple.kr/php/auth.php";       // REAL
-$url = "https://testcpay.payple.kr/php/auth.php";   // TEST
+$url = "https://democpay.payple.kr/php/auth.php";   // TEST
 
 //테스트 키
 $cst_id = "test";
