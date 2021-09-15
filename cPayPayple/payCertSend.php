@@ -4,7 +4,7 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.inc';
+include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
 header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -13,7 +13,7 @@ header("Pragma: no-cache");
 header("Content-type: application/json; charset=utf-8");
 
 try {
-    ##################################################### 결제요청 재컨펌(CERT) #####################################################
+    /* 결제요청 재컨펌(CERT) */
 
     // 결제 요청(CERT) 데이터 - 필수
     $pay_type = (isset($_POST['PCD_PAY_TYPE'])) ? $_POST['PCD_PAY_TYPE'] : "transfer";          // 결제수단 (transfer|card)
@@ -22,7 +22,7 @@ try {
     $pay_reqkey = (isset($_POST['PCD_PAY_REQKEY'])) ? $_POST['PCD_PAY_REQKEY'] : "";            // 최종 결제요청 승인키
     $pay_cofurl = (isset($_POST['PCD_PAY_COFURL'])) ? $_POST['PCD_PAY_COFURL'] : "";            // 최종 결제요청 URL
 
-    if ($auth_key == '') throw new Exception("가맹점인증 KEY 값이 존재하지 않습니다.");
+    if ($auth_key == '') throw new Exception("파트너인증 KEY 값이 존재하지 않습니다.");
 
     if ($pay_type == 'transfer') {
         if (!isset($_POST['PCD_PAYER_ID']) || $payer_id == '') throw new Exception("결제자고유ID 값이 존재하지 않습니다.");
@@ -32,7 +32,7 @@ try {
     if ($pay_cofurl == '') throw new Exception("결제승인요청 URL 값이 존재하지 않습니다.");
 
     
-    ##################################################### 결제요청 재컨펌(CERT) 요청 전송 #####################################################
+    /* 결제요청 재컨펌(CERT) 요청 전송 */
     //발급받은 비밀키. 유출에 주의하시기 바랍니다.
     $payCert_data = array(
         "PCD_CST_ID" => $cst_id,
@@ -54,7 +54,7 @@ try {
         "content-type: application/json; charset=UTF-8"
     );
 
-    ################### cURL Data Send ###################
+    /* cURL Data Send */
     $ch = curl_init($pay_cofurl);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -66,13 +66,13 @@ try {
     $payBuffer = ob_get_contents();
     ob_end_clean();
 
-    ##################################################### 결제요청 재컨펌(CERT) 요청 결과 #####################################################
+    /* 결제요청 재컨펌(CERT) 요청 결과 */
 
-    # 1. 요청 결과 파라미터 모두 받기 - #2의 'exit;' 까지 모두 주석처리 후 사용
+    /* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
     //echo $payBuffer;
     //exit;
 
-    # 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정
+    /* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
     // Converting To Object
     $payResult = json_decode($payBuffer);
 

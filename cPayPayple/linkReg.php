@@ -4,7 +4,7 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.inc';
+include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
 header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -13,8 +13,8 @@ header("Pragma: no-cache");
 header("Content-type: application/json; charset=utf-8");
 
 try {
-
-	##################################################### URL링크결제 파트너 인증 #####################################################
+	
+	/* URL링크결제 파트너 인증 */
 
 	//발급받은 비밀키. 유출에 주의하시기 바랍니다.
 	$auth_data = array(
@@ -48,7 +48,7 @@ try {
 	// Converting To Object
 	$authResult = json_decode($authBuffer);
 
-	if (!isset($authResult->result)) throw new Exception("가맹점 인증요청 실패");
+	if (!isset($authResult->result)) throw new Exception("파트너 인증요청 실패");
 
 	if ($authResult->result != 'success') throw new Exception($authResult->result_msg);
 
@@ -58,7 +58,7 @@ try {
 	$linkRegURL = $authResult->return_url;      	// 링크생성 요청 URL
 
 
-	##################################################### URL링크결제 생성 요청 파라미터 #####################################################
+	/* URL링크결제 생성 요청 파라미터 */
 
 	$pay_work = "LINKREG";																				// (필수) 요청 작업 구분 (URL링크결제 : LINKREG)
 	$pay_type = (isset($_POST['PCD_PAY_TYPE'])) ? $_POST['PCD_PAY_TYPE'] : "transfer|card";				// (필수) 결제수단 (transfer|card)
@@ -70,8 +70,7 @@ try {
 	$link_expiredate = (isset($_POST['PCD_LINK_EXPIREDATE'])) ? $_POST['PCD_LINK_EXPIREDATE'] : "";		// URL 결제 만료일
 
 
-	#####################################################  URL링크결제 생성 요청 전송 #####################################################
-
+	/* URL링크결제 생성 요청 전송 */
 
 	$linkReg_data = array(
 		"PCD_CST_ID" => $cst_id,
@@ -92,7 +91,7 @@ try {
 	// json_encoding...
 	$post_data = json_encode($linkReg_data);
 
-	################### cURL Data Send ###################
+	/* cURL Data Send */
 	$ch = curl_init($linkRegURL);
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -105,13 +104,13 @@ try {
 	ob_end_clean();
 
 
-	#####################################################  URL링크결제 생성 요청 결과 #####################################################
+	/* URL링크결제 생성 요청 결과 */
 
-	# 1. 요청 결과 파라미터 모두 받기 - #2의 'exit;' 까지 모두 주석처리 후 사용
+	/* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
 	//echo $payBuffer;
 	//exit;
 
-	# 2. 요청 결과(PCD_LINK_RST)에 따라 보내는 값을 임의로 조정
+	/* 2. 요청 결과(PCD_LINK_RST)에 따라 보내는 값을 임의로 조정 */
 	// Converting To Object
 	$payResult = json_decode($payBuffer);
 

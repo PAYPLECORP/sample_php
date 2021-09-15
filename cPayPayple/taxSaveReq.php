@@ -4,7 +4,7 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.inc';
+include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
 header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -13,7 +13,7 @@ header("Pragma: no-cache");
 header("Content-type: application/json; charset=utf-8");
 
 try {
-    ##################################################### 현금영수증 발행/취소 파트너 인증  #####################################################
+    /* 현금영수증 발행/취소 파트너 인증 */
 
     //현금영수증 발행, 취소 구분
     $pay_work = "";
@@ -27,7 +27,7 @@ try {
     $auth_data = array(
         "cst_id" => $cst_id,
         "custKey" => $custKey,
-        "PCD_PAY_WORK" => $pay_work   /*  현금영수증 발행 및 취소 요청 : TSREG, TSCANCEL */
+        "PCD_PAY_WORK" => $pay_work   /* 현금영수증 발행 및 취소 요청 : TSREG, TSCANCEL */
     );
 
     // content-type : application/json
@@ -55,7 +55,7 @@ try {
     // Converting To Object
     $authResult = json_decode($authBuffer);
 
-    if (!isset($authResult->result)) throw new Exception("가맹점 인증요청 실패");
+    if (!isset($authResult->result)) throw new Exception("파트너 인증요청 실패");
 
     if ($authResult->result != 'success') throw new Exception($authResult->result_msg);
 
@@ -64,7 +64,7 @@ try {
     $authKey = $authResult->AuthKey;                // 인증 키
     $taxSaveRegURL = $authResult->return_url;       // 현금영수증 발행 및 취소 요청 URL
 
-    ##################################################### 현금영수증 발행/취소 요청 파라미터  #####################################################
+    /* 현금영수증 발행/취소 요청 파라미터 */
 
     $payer_id = (isset($_POST['PCD_PAYER_ID'])) ? $_POST['PCD_PAYER_ID'] : "";                                                              // (필수) 결제자 고유 ID (빌링키)
     $pay_oid = (isset($_POST['PCD_PAY_OID'])) ? $_POST['PCD_PAY_OID'] : "";                                                                 // (필수) 주문번호
@@ -72,7 +72,7 @@ try {
     $taxsave_tradeuse = (isset($_POST['PCD_TAXSAVE_TRADEUSE']) && $_POST['PCD_TAXSAVE_TRADEUSE'] == 'personal') ? 'personal' : 'company';   // 현금영수증 발행 타입 (personal:소득공제용 | company:지출증빙)
     $taxsave_identinum = (isset($_POST['PCD_TAXSAVE_IDENTINUM'])) ? preg_replace("/([^0-9]+)/", "", $_POST['PCD_TAXSAVE_IDENTINUM']) : "";  // 현금영수증 발행대상 번호
 
-    ##################################################### 현금영수증 발행/취소 요청 전송  #####################################################
+    /* 현금영수증 발행/취소 요청 전송 */
 
     $tsReg_data = array(
         "PCD_CST_ID" => $cst_id,
@@ -90,7 +90,7 @@ try {
     // json_encoding...
     $post_data = json_encode($tsReg_data);
 
-    ################### cURL Data Send ###################
+    /* cURL Data Send */
     $ch = curl_init($taxSaveRegURL);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -103,13 +103,13 @@ try {
     ob_end_clean();
 
 
-    ##################################################### 현금영수증 발행/취소 요청 결과  #####################################################
+    /* 현금영수증 발행/취소 요청 결과 */
 
-    # 1. 요청 결과 파라미터 모두 받기 - #2의 'exit;' 까지 모두 주석처리 후 사용
+    /* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
 	//echo $payBuffer;
 	//exit;
 
-	# 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정
+	/* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
 	// Converting To Object
     $payResult = json_decode($payBuffer);
 

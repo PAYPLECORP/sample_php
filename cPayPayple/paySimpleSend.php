@@ -4,7 +4,7 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.inc';
+include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
 header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -14,7 +14,7 @@ header("Content-type: application/json; charset=utf-8");
 
 try {
 
-	##################################################### 계좌 정기결제 재결제 파트너 인증  #####################################################
+	/* 계좌 정기결제 재결제 파트너 인증 */
 
 	//발급받은 비밀키. 유출에 주의하시기 바랍니다.
 	$auth_data = array(
@@ -58,7 +58,7 @@ try {
 	$payReqURL = $authResult->return_url;           // 계좌 정기결제 재결제 URL
 
 
-	##################################################### 계좌 정기결제 재결제 요청 파라미터 #####################################################
+	/* 계좌 정기결제 재결제 요청 파라미터 */
 
 	$pay_type = "transfer";																					// (필수) 결제수단 (transfer)
 	$payer_id = (isset($_POST['PCD_PAYER_ID'])) ? $_POST['PCD_PAYER_ID'] : "";        						// (필수) 결제자 고유 ID (빌링키)
@@ -76,7 +76,7 @@ try {
 	$taxsave_idnum = (isset($_POST['PCD_TAXSAVE_IDNUM'])) ? $_POST['PCD_TAXSAVE_IDNUM'] : "";       		// 현금영수증 발행대상 번호
 
 
-	##################################################### 계좌 정기결제 재결제 요청 전송 #####################################################
+	/* 계좌 정기결제 재결제 요청 전송 */
 
 	$pay_data = array(
 		"PCD_CST_ID" => $cst_id,
@@ -103,7 +103,7 @@ try {
 	// json_encoding...
 	$post_data = json_encode($pay_data);
 
-	################### cURL Data Send ###################
+	/* cURL Data Send */
 	$ch = curl_init($payReqURL);
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -116,13 +116,13 @@ try {
 	ob_end_clean();
 
 
-	##################################################### 계좌 정기결제 재결제 요청 결과 #####################################################
+	/* 계좌 정기결제 재결제 요청 결과 */
 
-	# 1. 요청 결과 파라미터 모두 받기 - #2의 'exit;' 까지 모두 주석처리 후 사용
+	/* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
 	//echo $payBuffer;
 	//exit;
 
-	# 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정
+	/* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
 	// Converting To Object
 	$payResult = json_decode($payBuffer);
 

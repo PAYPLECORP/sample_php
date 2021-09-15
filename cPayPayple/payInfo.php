@@ -4,7 +4,7 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.inc';
+include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
 header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -13,7 +13,7 @@ header("Pragma: no-cache");
 header("Content-type: application/json; charset=utf-8");
 
 try {
-    ##################################################### 결제결과 조회 파트너 인증 #####################################################
+    /* 결제결과 조회 파트너 인증 */
 
     //발급받은 비밀키. 유출에 주의하시기 바랍니다.
     $auth_data = array(
@@ -57,13 +57,13 @@ try {
     $payInfoURL = $authResult->return_url;          // 결제결과 조회 URL
 
 
-    ##################################################### 결제결과 조회 요청 파라미터 #####################################################
+    /* 결제결과 조회 요청 파라미터 */
 
     $pay_type = (isset($_POST['PCD_PAY_TYPE'])) ? $_POST['PCD_PAY_TYPE'] : "transfer";                              // (필수) 결제수단 (transfer|card)
     $pay_oid = (isset($_POST['PCD_PAY_OID'])) ? $_POST['PCD_PAY_OID'] : "";                                         // (필수) 주문번호
     $pay_date = (isset($_POST['PCD_PAY_DATE'])) ? preg_replace("/([^0-9]+)/", "", $_POST['PCD_PAY_DATE']) : "";     // (필수) 원거래 결제일자
 
-    ##################################################### 결제결과 조회 요청 전송 #####################################################
+    /* 결제결과 조회 요청 전송 */
 
 
     $pay_data = array(
@@ -80,7 +80,7 @@ try {
     // json_encoding...
     $post_data = json_encode($pay_data);
 
-    ################### cURL Data Send ###################
+    /* cURL Data Send */
     $ch = curl_init($payInfoURL);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -92,13 +92,13 @@ try {
     $payBuffer = ob_get_contents();
     ob_end_clean();
 
-    ##################################################### 결제결과 조회 요청 결과 #####################################################
+    /* 결제결과 조회 요청 결과 */
 
-    # 1. 요청 결과 파라미터 모두 받기 - #2의 'exit;' 까지 모두 주석처리 후 사용
+    /* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
     //echo $payBuffer;
     //exit;
 
-    # 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정
+    /* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
     // Converting To Object
     $payResult = json_decode($payBuffer);
 

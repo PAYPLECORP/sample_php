@@ -9,9 +9,9 @@
 
 📂 payple/inc/**config.inc** 계정 관리 파일 ([계정발급 방법](https://developer.payple.kr/quick/account))<br>
 #### 결제연동
->📂 **order.html &nbsp;:** &nbsp;상품 주문<br>
->📂 **order_confirm.html &nbsp;:** &nbsp;주문확정 및 결제<br>
->📂 **order_result.html &nbsp;:** &nbsp;결제결과<br>
+>📂 **order.php &nbsp;:** &nbsp;상품 주문<br>
+>📂 **order_confirm.php &nbsp;:** &nbsp;주문확정 및 결제<br>
+>📂 **order_result.php &nbsp;:** &nbsp;결제결과<br>
 #### 기타 API
 >📂 **linkReg &nbsp;:** &nbsp;URL링크결제<br>
 >📂 **payCertSend &nbsp;:** &nbsp;결제요청 재컨펌(CERT) 방식<br>
