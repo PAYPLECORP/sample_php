@@ -249,7 +249,7 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 
 		#subject,
 		#parameter {
-			background-color: plum;
+			background-color: rgba(120,82,232,0.2);
 			font-size: 15px;
 		}
 	</style>

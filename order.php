@@ -25,7 +25,7 @@ $pay_oid = preg_replace("/([^0-9a-zA-Z]+)/", "", "test" . microtime());
             $('#orderFormSubmit').on('click', function(event) {
 
                 var fm = $('#orderForm')[0];
-                var action_url = "order_confirm.html";
+                var action_url = "order_confirm.php";
 
                 fm.method = 'POST';
                 fm.action = action_url;
@@ -121,7 +121,7 @@ $pay_oid = preg_replace("/([^0-9a-zA-Z]+)/", "", "test" . microtime());
         #subject,
         #parameter,
         #value {
-            background-color: plum;
+            background-color: rgba(120,82,232,0.2);
             font-size: 15px;
         }
 
