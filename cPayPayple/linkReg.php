@@ -13,7 +13,7 @@ header("Pragma: no-cache");
 header("Content-type: application/json; charset=utf-8");
 
 try {
-	
+
 	/* URL링크결제 파트너 인증 */
 
 	//발급받은 비밀키. 유출에 주의하시기 바랍니다.
@@ -136,7 +136,7 @@ try {
 		$pay_total = "";										// 결제요청금액
 		$taxsave_flag = "";										// 현금영수증 발행요청 (Y|N)
 		$link_url = "";											// 링크결제 URL
-		$link_memo ="";											// 링크결제 메모
+		$link_memo = "";										// 링크결제 메모
 
 	}
 
@@ -160,7 +160,6 @@ try {
 	echo $JSON_DATA;
 
 	exit;
-	
 } catch (Exception $e) {
 
 	$errMsg = $e->getMessage();

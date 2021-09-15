@@ -212,4 +212,3 @@ try {
 	echo $DATA;
 	
 }
-?>

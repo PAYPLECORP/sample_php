@@ -106,11 +106,11 @@ try {
     /* 현금영수증 발행/취소 요청 결과 */
 
     /* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
-	//echo $payBuffer;
-	//exit;
+    //echo $payBuffer;
+    //exit;
 
-	/* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
-	// Converting To Object
+    /* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
+    // Converting To Object
     $payResult = json_decode($payBuffer);
 
     if (isset($payResult->PCD_PAY_RST) && $payResult->PCD_PAY_RST != '') {
@@ -126,17 +126,16 @@ try {
 
     } else {
 
-        $pay_rst = "error";                                 
+        $pay_rst = "error";
         $pay_code = "";
-        $pay_msg = "요청결과 수신 실패";                    
+        $pay_msg = "요청결과 수신 실패";
         //$pay_work = ;
         //$pay_oid = ;                                      
-        $taxsave_amount = "";                               
-        $taxsave_mgtnum = "";                               
-
+        $taxsave_amount = "";
+        $taxsave_mgtnum = "";
     }
 
-    
+
     $result = array(
         "PCD_PAY_RST" => $pay_rst,
         "PCD_PAY_CODE" => $pay_code,

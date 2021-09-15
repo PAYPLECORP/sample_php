@@ -163,7 +163,6 @@ try {
         $DATA['PCD_PAY_CARDTRADENUM'] = $pay_cardtradenum;
         $DATA['PCD_PAY_CARDAUTHNO'] = $pay_cardauthno;
         $DATA['PCD_PAY_CARDRECEIPT'] = $pay_cardreceipt;
-
     } else if ($pay_type == 'transfer') {
         $DATA['PCD_PAY_BANK'] = $pay_bank;
         $DATA['PCD_PAY_BANKNAME'] = $pay_bankname;
@@ -176,7 +175,6 @@ try {
 
     echo $JSON_DATA;
     exit;
-
 } catch (Exception $e) {
 
     $errMsg = $e->getMessage();

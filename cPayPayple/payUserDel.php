@@ -143,4 +143,3 @@ try {
 	echo $DATA;
 	
 }
-?>

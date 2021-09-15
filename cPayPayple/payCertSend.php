@@ -31,7 +31,7 @@ try {
     if ($pay_reqkey == '') throw new Exception("결제요청 고유KEY 값이 존재하지 않습니다.");
     if ($pay_cofurl == '') throw new Exception("결제승인요청 URL 값이 존재하지 않습니다.");
 
-    
+
     /* 결제요청 재컨펌(CERT) 요청 전송 */
     //발급받은 비밀키. 유출에 주의하시기 바랍니다.
     $payCert_data = array(
