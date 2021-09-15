@@ -7,7 +7,7 @@
 
 ## Documentation
 
-📂 payple/inc/**config.inc** 계정 관리 파일 ([계정발급 방법](https://developer.payple.kr/quick/account))<br>
+📂 payple/inc/**config.php** 계정 관리 파일 ([계정발급 방법](https://developer.payple.kr/quick/account))<br>
 #### 결제연동
 >📂 **order.php &nbsp;:** &nbsp;상품 주문<br>
 >📂 **order_confirm.php &nbsp;:** &nbsp;주문확정 및 결제<br>
