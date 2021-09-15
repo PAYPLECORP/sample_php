@@ -188,11 +188,11 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 
 					}
 
-					// 2.2 간편결제 (재결제)
+					// 2.2 간편결제 (빌링키결제)
 					if (simple_flag == 'Y' && payer_id != '') {
 
 						// PCD_PAYER_ID 는 소스상에 표시하지 마시고 반드시 Server Side Script 를 이용하여 불러오시기 바랍니다.	
-						obj.PCD_PAYER_ID = payer_id; // (필수) 결제자 고유ID (본인인증 된 결제회원 고유 KEY)
+						obj.PCD_PAYER_ID = payer_id; // (필수) 빌링키 - 결제자 고유ID (본인인증 된 결제회원 고유 KEY)
 						obj.PCD_SIMPLE_FLAG = 'Y'; // (필수) 간편결제 여부 (Y|N)
 						obj.PCD_PAY_GOODS = pay_goods; // (필수) 상품명
 						obj.PCD_PAY_TOTAL = pay_total; // (필수) 결제요청금액
