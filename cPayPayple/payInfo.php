@@ -153,9 +153,12 @@ try {
         "PCD_PAY_TYPE" => $pay_type,
         "PCD_PAYER_NO" => $payer_no,
         "PCD_PAYER_ID" => $payer_id,
+        "PCD_PAYER_EMAIL" => $payer_email,
         "PCD_PAY_GOODS" => $pay_goods,
         "PCD_PAY_TOTAL" => $pay_total,
-        "PCD_PAY_TIME" => $pay_time
+        "PCD_PAY_TIME" => $pay_time,
+        "PCD_PAY_ISTAX" => $pay_istax,
+        "PCD_PAY_TAXTOTAL" => $pay_taxtotal
     );
     if ($pay_type == 'card') {
         $DATA['PCD_PAY_CARDNAME'] = $pay_cardname;
