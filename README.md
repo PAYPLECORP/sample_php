@@ -1,4 +1,4 @@
-# payple-sample-php
+# Sample_php
 
 🏠[페이플 홈페이지](https://www.payple.kr/)<br>
 페이플 결제 서비스는 간편결제, 정기결제와 같은 <br>
