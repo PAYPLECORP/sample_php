@@ -64,6 +64,7 @@ try {
     $authKey = $authResult->AuthKey;                // 인증 키
     $taxSaveRegURL = $authResult->return_url;       // 현금영수증 발행 및 취소 요청 URL
 
+
     /* 현금영수증 발행/취소 요청 파라미터 */
 
     $payer_id = (isset($_POST['PCD_PAYER_ID'])) ? $_POST['PCD_PAYER_ID'] : "";                                                              // (필수) 결제자 고유 ID (빌링키)

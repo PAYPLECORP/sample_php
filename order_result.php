@@ -8,7 +8,7 @@ echo "<br/><br/><br/>";
 
 /* 2. 결제결과 파라미터로 받기 - 응답 파라미터를 받아서 활용해보세요. */
 $pay_rst = (isset($_POST['PCD_PAY_RST'])) ? $_POST['PCD_PAY_RST'] : "";                             // 결제요청 결과 (success | error)
-$pay_cod = (isset($_POST['PCD_PAY_CODE'])) ? $_POST['PCD_PAY_CODE'] : "";                           // 결제요청 결과 코드
+$pay_code = (isset($_POST['PCD_PAY_CODE'])) ? $_POST['PCD_PAY_CODE'] : "";                           // 결제요청 결과 코드
 $pay_msg = (isset($_POST['PCD_PAY_MSG'])) ? $_POST['PCD_PAY_MSG'] : "";                             // 결제요청 결과 메세지
 $pay_type = (isset($_POST['PCD_PAY_TYPE'])) ? $_POST['PCD_PAY_TYPE'] : "";                          // 결제수단 (transfer|card)
 $card_ver = (isset($_POST['PCD_CARD_VER'])) ? $_POST['PCD_CARD_VER'] : "";                          // 카드 세부 결제방식
@@ -41,7 +41,6 @@ $pay_cardnum = (isset($_POST['PCD_PAY_CARDNUM'])) ? $_POST['PCD_PAY_CARDNUM'] : 
 $pay_cardtradenum = (isset($_POST['PCD_PAY_CARDTRADENUM'])) ? $_POST['PCD_PAY_CARDTRADENUM'] : "";  // 카드 거래번호
 $pay_cardauthno = (isset($_POST['PCD_PAY_CARDAUTHNO'])) ? $_POST['PCD_PAY_CARDAUTHNO'] : "";        // 카드 승인번호
 $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARDRECEIPT'] : "";     // 카드 매출전표 URL
-$pay_cardtradenum = (isset($_POST['PCD_PAY_CARDTRADENUM'])) ? $_POST['PCD_PAY_CARDTRADENUM'] : "";  // 카드 거래번호
 
 ?>
 <!DOCTYPE html>
