@@ -1,4 +1,4 @@
-# payple-sample-php
+# Sample_php
 
 🏠[페이플 홈페이지](https://www.payple.kr/)<br>
 페이플 결제 서비스는 간편결제, 정기결제와 같은 <br>
@@ -12,7 +12,7 @@
 >📂 **order.php &nbsp;:** &nbsp;상품 주문<br>
 >📂 **order_confirm.php &nbsp;:** &nbsp;주문확정 및 결제<br>
 >📂 **order_result.php &nbsp;:** &nbsp;결제결과<br>
-#### 기타 API
+#### 기타 API (.html, .php)
 >📂 **linkReg &nbsp;:** &nbsp;URL링크결제<br>
 >📂 **payCertSend &nbsp;:** &nbsp;결제요청 재컨펌(CERT) 방식<br>
 >📂 **payInfo &nbsp;:** &nbsp;결제결과 조회<br> 
