@@ -16,9 +16,10 @@ header("Pragma: no-cache");
 
 
 /* ※ Referer 설정 방법
-	TEST : referer에는 테스트 결제창을 띄우는 도메인을 넣어주셔야합니다. 결제창을 띄울 도메인과 referer값이 다르면 무한로딩이 발생합니다.
+	TEST : referer에는 테스트 결제창을 띄우는 도메인을 넣어주셔야합니다. 
+		   결제창을 띄울 도메인과 referer값이 다르면 [AUTH0007] 응답이 발생합니다.
 	REAL : referer에는 파트너사 도메인으로 등록된 도메인을 넣어주셔야합니다. 
-		   다른 도메인을 넣으시면 [AUTH0004] 에러가 발생합니다.
+		   다른 도메인을 넣으시면 [AUTH0004] 응답이 발생합니다.
 		   또한, TEST에서와 마찬가지로 결제창을 띄우는 도메인과 같아야 합니다. 
 */
 $CURLOPT_HTTPHEADER = array(
