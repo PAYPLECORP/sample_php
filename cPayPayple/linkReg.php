@@ -64,6 +64,7 @@ try {
 	$pay_type = (isset($_POST['PCD_PAY_TYPE'])) ? $_POST['PCD_PAY_TYPE'] : "transfer|card";				// (필수) 결제수단 (transfer|card)
 	$pay_goods = (isset($_POST['PCD_PAY_GOODS'])) ? $_POST['PCD_PAY_GOODS'] : "";						// (필수) 상품명		
 	$pay_total = (isset($_POST['PCD_PAY_TOTAL'])) ? $_POST['PCD_PAY_TOTAL'] : "";						// (필수) 결제요청금액
+	$card_ver = (isset($_POST['PCD_CARD_VER'])) ? $_POST['PCD_CARD_VER'] : "";							// 카드 세부 결제방식 (Default: 01+02)
 	$pay_istax = (isset($_POST['PCD_PAY_ISTAX'])) ? $_POST['PCD_PAY_ISTAX'] : "Y";						// 과세여부
 	$pay_taxtotal = (isset($_POST['PCD_PAY_TAXTOTAL'])) ? $_POST['PCD_PAY_TAXTOTAL'] : "";				// 부가세(복합과세 적용 시)
 	$taxsave_flag = (isset($_POST['PCD_TAXSAVE_FLAG'])) ? $_POST['PCD_TAXSAVE_FLAG'] : "";				// 현금영수증 발행요청 (Y|N)
@@ -80,6 +81,7 @@ try {
 		"PCD_PAY_TYPE" => $pay_type,
 		"PCD_PAY_GOODS" => $pay_goods,
 		"PCD_PAY_TOTAL" => $pay_total,
+		"PCD_CARD_VER" => $card_ver,
 		"PCD_PAY_ISTAX" => $pay_istax,
 		"PCD_PAY_TAXTOTAL" => $pay_taxtotal,
 		"PCD_TAXSAVE_FLAG" => $taxsave_flag,
@@ -119,6 +121,8 @@ try {
 		$link_rst = $payResult->PCD_LINK_RST;					// 요청 결과 (success)
 		$link_msg = $payResult->PCD_LINK_MSG;					// 요청 결과 메세지
 		$pay_goods = $payResult->PCD_PAY_GOODS;					// 상품명
+		$pay_type = $payResult->PCD_PAY_TYPE;					// 결제수단
+		$card_ver = $payResult->PCD_CARD_VER;					// 카드 세부 결제방식
 		$pay_total = $payResult->PCD_PAY_TOTAL;					// 결제요청금액
 		$pay_istax = $payResult->PCD_PAY_ISTAX;					// 과세여부
 		$pay_taxtotal = $payResult->PCD_PAY_TAXTOTAL;			// 부가세(복합과세 적용 시)
@@ -131,7 +135,7 @@ try {
 	} else {
 
 		$link_rst = "error";									// 요청 결과 (error)
-		$link_msg = "요청결과 수신 실패";						// 요청 결과 메세지
+		$link_msg = "요청결과 수신 실패";						 // 요청 결과 메세지
 		$pay_goods = "";										// 상품명
 		$pay_total = "";										// 결제요청금액
 		$taxsave_flag = "";										// 현금영수증 발행요청 (Y|N)
@@ -154,6 +158,9 @@ try {
 		"PCD_LINK_KEY" => $link_key,
 		"PCD_LINK_URL" => $link_url
 	);
+	if ($pay_type != "transfer") {
+		$DATA['PCD_CARD_VER'] = $card_ver;
+	}
 
 	$JSON_DATA = json_encode($DATA, JSON_UNESCAPED_UNICODE);
 
