@@ -1,66 +1,12 @@
 <?php
-/* 파트너 인증 */
-
-/* 	※ Request URL
- *	TEST(테스트) : https://democpay.payple.kr/php/auth.php
- *	REAL(운영) : https://cpay.payple.kr/php/auth.php 
+/**
+ * 주문정보 확인 및 결제창 호출 페이지
+ * - 새로운 파트너 인증 방식인 클라이언트 키(clientKey)로 인증 (Updated: 2023-07-06)
  */
 
 include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
-header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0; pre-check=0", false);
-header("Pragma: no-cache");
-//header("Content-type: application/json; charset=utf-8");
-
-
-/* ※ Referer 설정 방법
-	TEST : referer에는 테스트 결제창을 띄우는 도메인을 넣어주셔야합니다. 
-		   결제창을 띄울 도메인과 referer값이 다르면 [AUTH0007] 응답이 발생합니다.
-	REAL : referer에는 파트너사 도메인으로 등록된 도메인을 넣어주셔야합니다. 
-		   다른 도메인을 넣으시면 [AUTH0004] 응답이 발생합니다.
-		   또한, TEST에서와 마찬가지로 결제창을 띄우는 도메인과 같아야 합니다. 
-*/
-$CURLOPT_HTTPHEADER = array(
-	"referer: http://" . $_SERVER['HTTP_HOST'] // 필수
-);
-
-// 발급받은 비밀키. 유출에 주의하시기 바랍니다.
-// 실제 서비스(REAL)에 붙이실 때는 발급받은 운영 계정 키를 넣어주세요.
-$post_data = array(
-	"cst_id" => $cst_id,
-	"custKey" => $custKey
-);
-
-// TEST와 REAL 서버에 따라 알맞는 URL을 넣어주세요
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
-
-ob_start();
-$authRes = curl_exec($ch);
-$authBuffer = ob_get_contents();
-ob_end_clean();
-
-echo '<script>console.log(' . $authBuffer . ')</script>';
-
-// Converting To Object
-$authResult = json_decode($authBuffer);
-
-if (!isset($authResult->result)) throw new Exception("파트너 인증요청 실패");
-
-if ($authResult->result != 'success') throw new Exception($authResult->result_msg);
-
-$authKey = $authResult->AuthKey;              // 인증 키
-$payReqURL = $authResult->return_url;         // 결제요청 URL
-
 
 /* 결제요청 파라미터 */
-
 $pay_oid = isset($_POST['pay_oid']) ? $_POST['pay_oid'] : "";
 $payer_no = isset($_POST['payer_no']) ? $_POST['payer_no'] : "";
 $payer_name = isset($_POST['payer_name']) ? $_POST['payer_name'] : "";
@@ -149,7 +95,7 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 				obj.PCD_PAY_WORK = pay_work; // (필수) 결제요청 방식 (AUTH | PAY | CERT)
 
 				// 카드결제 시 필수 (카드 세부 결제방식)
-				obj.PCD_CARD_VER = card_ver; // Default: 01 (01: 간편/정기결제, 02: 앱카드)
+				if (pay_type == "card") obj.PCD_CARD_VER = card_ver; // Default: 01 (01: 간편/정기결제, 02: 앱카드)
 
 				/* 결제요청 방식별(PCD_PAY_WORK) 파라미터 설정 */
 				/*
@@ -212,11 +158,8 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 				obj.PCD_RST_URL = pcd_rst_url; // (필수) 결제(요청)결과 RETURN URL
 				//obj.callbackFunction = getResult; // (선택) 결과를 받고자 하는 callback 함수명 (callback함수를 설정할 경우 PCD_RST_URL 이 작동하지 않음)
 
-				// 파트너 인증시 받은 AuthKey 값 입력
-				obj.PCD_AUTH_KEY = "<?= $authKey ?>";
-
-				// 파트너 인증시 받은 return_url 값 입력
-				obj.PCD_PAY_URL = "<?= $payReqURL ?>";
+				/* 파트너 인증 - 클라이언트 키(clientKey) */
+				obj.clientKey = "<?= $clientKey ?>";
 
 				PaypleCpayAuthCheck(obj);
 
