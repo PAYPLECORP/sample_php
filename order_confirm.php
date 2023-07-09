@@ -35,8 +35,9 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 	<title>Insert title here</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<!-- 페이플 TEST 결제창 -->
-	<script src="https://democpay.payple.kr/js/cpay.payple.1.0.1.js"></script>
+	<!-- 서버별 페이플 국내결제 스크립트 추가 -->
+	<script src="https://democpay.payple.kr/js/v1/payment.js"></script> <!-- 테스트(TEST) -->
+	<!-- <script src="https://cpay.payple.kr/js/v1/payment.js"></script> --> <!-- 운영(REAL) -->
 
 	<script>
 		$(document).ready(function() {
