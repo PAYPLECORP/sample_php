@@ -42,6 +42,13 @@ $pay_cardtradenum = (isset($_POST['PCD_PAY_CARDTRADENUM'])) ? $_POST['PCD_PAY_CA
 $pay_cardauthno = (isset($_POST['PCD_PAY_CARDAUTHNO'])) ? $_POST['PCD_PAY_CARDAUTHNO'] : "";        // 카드 승인번호
 $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARDRECEIPT'] : "";     // 카드 매출전표 URL
 
+$pay_method = (isset($_POST['PCD_PAY_METHOD'])) ? $_POST['PCD_PAY_METHOD'] : "";                    // 결제 수단 (appCard|naverPay|kakaoPay)
+$easy_pay_method = (isset($_POST['PCD_EASY_PAY_METHOD'])) ? $_POST['PCD_EASY_PAY_METHOD'] : "";    // 간편결제 수단
+$tx_key = (isset($_POST['PCD_TX_KEY'])) ? $_POST['PCD_TX_KEY'] : "";                                // 거래 고유 키
+
+// 환불 부가세 (환불 시 결제 부가세와 동일하게 설정)
+$refund_taxtotal = $pay_taxtotal;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,8 +84,14 @@ $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARD
                         url: '/cPayPayple/payCertSend.php',
                         dataType: 'json',
                         data: formData,
-                        success: function(data) {
-                            console.log(data);
+                        success: function(data, textStatus, jqXHR) {
+                            console.log('===== CERT 결제승인 응답 시작 =====');
+                            console.log('Status Code:', jqXHR.status);
+                            console.log('Status Text:', jqXHR.statusText);
+                            console.log('Response Headers:', jqXHR.getAllResponseHeaders());
+                            console.log('Response Data (JSON):', data);
+                            console.log('Response Text (Raw):', jqXHR.responseText);
+                            console.log('===== CERT 결제승인 응답 끝 =====');
 
                             alert(data.PCD_PAY_MSG);
 
@@ -97,7 +110,15 @@ $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARD
 
                         },
                         error: function(jqxhr, status, error) {
-                            console.log(jqxhr);
+                            console.log('===== CERT 결제승인 에러 시작 =====');
+                            console.log('Status Code:', jqxhr.status);
+                            console.log('Status Text:', jqxhr.statusText);
+                            console.log('Response Headers:', jqxhr.getAllResponseHeaders());
+                            console.log('Response Text:', jqxhr.responseText);
+                            console.log('Error:', error);
+                            console.log('Status:', status);
+                            console.log('jqXHR Object:', jqxhr);
+                            console.log('===== CERT 결제승인 에러 끝 =====');
 
                             alert(jqxhr.statusText + ",  " + status + ",   " + error);
                             alert(jqxhr.status);
@@ -176,10 +197,10 @@ $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARD
         PCD_PAYER_ID = <?= $payer_id ?>
         <br>
         PCD_PAYER_NO = <?= $payer_no ?>
-        <? if ($pay_type == 'transfer') { ?>
+        <?php if ($pay_type == 'transfer') { ?>
             <br>
             PCD_PAY_BANKACCTYPE = <?= $pay_bankacctype ?>
-        <? } ?>
+        <?php } ?>
         <br>
         PCD_PAYER_NAME = <?= $payer_name ?>
         <br>
@@ -189,20 +210,20 @@ $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARD
         <br>
         PCD_PAY_TOTAL = <?= $pay_total ?>
         <br>
-        <? if ($pay_type == 'card') { ?>
+        <?php if ($pay_type == 'card') { ?>
             PCD_PAY_TAXTOTAL = <?= $pay_taxtotal ?>
             <br>
             PCD_PAY_ISTAX = <?= $pay_istax ?>
-        <? } ?>
-        <? if ($pay_type == 'transfer') { ?>
+        <?php } ?>
+        <?php if ($pay_type == 'transfer') { ?>
             <br>
             PCD_PAY_BANK = <?= $pay_bank ?>
             <br>
             PCD_PAY_BANKNAME = <?= $pay_bankname ?>
             <br>
             PCD_PAY_BANKNUM = <?= $pay_banknum ?>
-        <? } ?>
-        <? if ($pay_type == 'card') { ?>
+        <?php } ?>
+        <?php if ($pay_type == 'card') { ?>
             <br>
             PCD_PAY_CARDNAME = <?= $pay_cardname ?>
             <br>
@@ -213,18 +234,24 @@ $pay_cardreceipt = (isset($_POST['PCD_PAY_CARDRECEIPT'])) ? $_POST['PCD_PAY_CARD
             PCD_PAY_CARDAUTHNO = <?= $pay_cardauthno ?>
             <br>
             PCD_PAY_CARDRECEIPT = <?= $pay_cardreceipt ?>
-        <? } ?>
+        <?php } ?>
+        <br>
+        PCD_PAY_METHOD = <?= $pay_method ?>
+        <br>
+        PCD_EASY_PAY_METHOD = <?= $easy_pay_method ?>
         <br>
         PCD_PAY_TIME = <?= $pay_time ?>
         <br>
         PCD_TAXSAVE_RST = <?= $taxsave_rst ?>
+        <br>
+        PCD_TX_KEY = <?= $tx_key ?>
     </div>
 
     <div style="width:800px; height:20px">&nbsp;</div>
 
     <div style="border:1px; width:800px;text-align:center;">
-        <? if ($pay_work == 'CERT') { ?><button id="payConfirmAct">결제승인요청</button> <? } ?>
-        <? if ($pay_work != 'AUTH') { ?><button id="payRefundAct">결제승인취소</button> <? } ?>
+        <?php if ($pay_work == 'CERT') { ?><button id="payConfirmAct">결제승인요청</button><?php } ?>
+        <?php if ($pay_work != 'AUTH') { ?><button id="payRefundAct">결제승인취소</button><?php } ?>
     </div>
 
     <form id="payConfirmForm">

@@ -4,48 +4,22 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
-header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0; pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-type: application/json; charset=utf-8");
+require_once $_SERVER['DOCUMENT_ROOT'] . '/cPayPayple/Utils/CurlClient.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
+
+CurlClient::setApiHeaders();
 
 try {
     /* 결제결과 조회 파트너 인증 */
 
-    //발급받은 비밀키. 유출에 주의하시기 바랍니다.
     $auth_data = array(
         "cst_id" => $cst_id,
         "custKey" => $custKey,
         "PCD_PAYCHK_FLAG" => "Y"
     );
 
-    // content-type : application/json
-    // json_encoding...
-    $post_data = json_encode($auth_data);
-
-    // cURL Header
-    $CURLOPT_HTTPHEADER = array(
-        "cache-control: no-cache",
-        "content-type: application/json; charset=UTF-8",
-        "referer: http://$SERVER_NAME"
-    );
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
-
-    ob_start();
-    $authRes = curl_exec($ch);
-    $authBuffer = ob_get_contents();
-    ob_end_clean();
-
-    // Converting To Object
-    $authResult = json_decode($authBuffer);
+    // 인증 요청
+    $authResult = CurlClient::post($url, $auth_data, $SERVER_NAME);
 
     if (!isset($authResult->result)) throw new Exception("인증요청 실패");
 
@@ -65,7 +39,6 @@ try {
 
     /* 결제결과 조회 요청 전송 */
 
-
     $pay_data = array(
         "PCD_CST_ID" => $cst_id,
         "PCD_CUST_KEY" => $custKey,
@@ -76,31 +49,10 @@ try {
         "PCD_PAY_DATE" => $pay_date
     );
 
-    // content-type : application/json
-    // json_encoding...
-    $post_data = json_encode($pay_data);
-
-    /* cURL Data Send */
-    $ch = curl_init($payInfoURL);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
-
-    ob_start();
-    $payRes = curl_exec($ch);
-    $payBuffer = ob_get_contents();
-    ob_end_clean();
+    // 결제 조회 요청
+    $payResult = CurlClient::post($payInfoURL, $pay_data, $SERVER_NAME);
 
     /* 결제결과 조회 요청 결과 */
-
-    /* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
-    //echo $payBuffer;
-    //exit;
-
-    /* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
-    // Converting To Object
-    $payResult = json_decode($payBuffer);
 
     if (isset($payResult->PCD_PAY_RST) && $payResult->PCD_PAY_RST != '') {
 
@@ -136,11 +88,8 @@ try {
 
         $pay_rst = "error";
         $pay_code = "결제내역 조회 에러";
-        //$pay_type = ;
-        //$pay_oid = ;
         $pay_goods = "";
         $pay_total = "";
-        //$pay_time = ;
         $taxsave_rst = "";
     }
 

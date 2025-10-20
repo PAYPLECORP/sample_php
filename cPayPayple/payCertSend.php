@@ -4,13 +4,10 @@
  * cst_id, custKey, authKey 등 접속용 key 는 절대 외부에 노출되지 않도록
  * 서버 사이드 스크립트(server-side script) 내부에서 사용되어야 합니다.
  */
-include $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
-header("Expires: Mon 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . gmdate("D, d, M Y H:i:s") . " GMT");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0; pre-check=0", false);
-header("Pragma: no-cache");
-header("Content-type: application/json; charset=utf-8");
+require_once $_SERVER['DOCUMENT_ROOT'] . '/cPayPayple/Utils/CurlClient.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/payple/inc/config.php';
+
+CurlClient::setApiHeaders();
 
 try {
     /* 결제요청 재컨펌(CERT) */
@@ -42,39 +39,8 @@ try {
         "PCD_PAY_REQKEY" => $pay_reqkey
     );
 
-
-
-    // content-type : application/json
-    // json_encoding...
-    $post_data = json_encode($payCert_data);
-
-    // cURL Header
-    $CURLOPT_HTTPHEADER = array(
-        "cache-control: no-cache",
-        "content-type: application/json; charset=UTF-8"
-    );
-
-    /* cURL Data Send */
-    $ch = curl_init($pay_cofurl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $CURLOPT_HTTPHEADER);
-
-    ob_start();
-    $payRes = curl_exec($ch);
-    $payBuffer = ob_get_contents();
-    ob_end_clean();
-
-    /* 결제요청 재컨펌(CERT) 요청 결과 */
-
-    /* 1. 요청 결과 파라미터 모두 받기 - 2번 방법의 'exit;' 까지 모두 주석처리 후 사용 */
-    //echo $payBuffer;
-    //exit;
-
-    /* 2. 요청 결과(PCD_PAY_RST)에 따라 보내는 값을 임의로 조정 */
-    // Converting To Object
-    $payResult = json_decode($payBuffer);
+    // 결제 승인 요청
+    $payResult = CurlClient::post($pay_cofurl, $payCert_data, null);
 
     if (!isset($payResult->PCD_PAY_RST)) {
         throw new Exception("결제승인 결과수신 실패");
@@ -101,6 +67,10 @@ try {
         $pay_istax = $payResult->PCD_PAY_ISTAX;                 // 과세 여부
         $pay_taxtotal = $payResult->PCD_PAY_TAXTOTAL;           // 부가세(복합과세 적용 시)
         $pay_time = $payResult->PCD_PAY_TIME;                   // 결제완료 시간
+        $tx_key = isset($payResult->PCD_TX_KEY) ? $payResult->PCD_TX_KEY : "";                          // 거래 고유 키
+        $pay_method = isset($payResult->PCD_PAY_METHOD) ? $payResult->PCD_PAY_METHOD : "";              // 결제 수단
+        $easy_pay_method = isset($payResult->PCD_EASY_PAY_METHOD) ? $payResult->PCD_EASY_PAY_METHOD : "";  // 간편결제 수단
+
 
         if ($pay_type == 'card') {
             $pay_cardname = $payResult->PCD_PAY_CARDNAME;                                                       // 카드사명
@@ -137,7 +107,10 @@ try {
             "PCD_PAY_TOTAL" => $pay_total,
             "PCD_PAY_ISTAX" => $pay_istax,
             "PCD_PAY_TAXTOTAL" => $pay_taxtotal,
-            "PCD_PAY_TIME" => $pay_time
+            "PCD_PAY_TIME" => $pay_time,
+            "PCD_TX_KEY" => $tx_key,
+            "PCD_PAY_METHOD" => $pay_method,
+            "PCD_EASY_PAY_METHOD" => $easy_pay_method
         );
 
         if ($pay_type == 'card') {
