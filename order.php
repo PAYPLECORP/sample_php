@@ -34,10 +34,11 @@ $pay_oid = preg_replace("/([^0-9a-zA-Z]+)/", "", "test" . microtime());
                 event.preventDefault();
             });
 
-            /* 
+            /*
                 #pay_type: 결제수단
                 #taxsave_view: 현금영수증 발행여부 view
                 #card_ver_view: 카드 세부 결제방식 view
+                #pay_method_view: 결제 수단 view
             */
             $("#pay_type").on('change', function(e) {
 
@@ -51,17 +52,25 @@ $pay_oid = preg_replace("/([^0-9a-zA-Z]+)/", "", "test" . microtime());
                 } else {
                     $("#taxsave_view").css('display', '');
                     $("#card_ver_view").css('display', 'none');
+                    $("#pay_method_view").css('display', 'none');
                 }
 
-                $('#card_ver').on('change', function() {
+            });
 
-                    if ($(this).val() == '01') {
-                        $('#pay_work option[value*="AUTH"]').prop('disabled', false);
-                    } else {
-                        $('#pay_work option[value*="AUTH"]').prop('disabled', true);
-                    }
+            // 카드 세부 결제방식 변경 시
+            $('#card_ver').on('change', function() {
 
-                });
+                var card_ver_val = $(this).val();
+
+                if (card_ver_val == '01') {
+                    $('#pay_work option[value*="AUTH"]').prop('disabled', false);
+                    $("#pay_method_view").css('display', 'none');
+                } else if (card_ver_val == '02') {
+                    $('#pay_work option[value*="AUTH"]').prop('disabled', true);
+                    $("#pay_method_view").css('display', '');
+                } else {
+                    $("#pay_method_view").css('display', 'none');
+                }
 
             });
 
@@ -273,6 +282,22 @@ $pay_oid = preg_replace("/([^0-9a-zA-Z]+)/", "", "test" . microtime());
                             <option value="02">앱카드</option>
                         </select>
                     </span>
+                </td>
+            </tr>
+            <tr id="pay_method_view" style="display:none;">
+                <th>
+                    결제 수단
+                </th>
+                <th>
+                    PCD_PAY_METHOD
+                </th>
+                <td>
+                    <select id="pay_method_flag" name="pay_method_flag">
+                        <option value="">선택안함(전체)</option>
+                        <option value="appCard">앱카드</option>
+                        <option value="naverPay">네이버페이</option>
+                        <option value="kakaoPay">카카오페이</option>
+                    </select>
                 </td>
             </tr>
             <tr id="taxsave_view">

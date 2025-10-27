@@ -17,6 +17,7 @@ $pay_total = isset($_POST['pay_total']) ? preg_replace("/([^0-9\.]+)/", "", $_PO
 
 $pay_type = isset($_POST['pay_type']) ? $_POST['pay_type'] : "transfer";
 $card_ver = (isset($_POST['card_ver']) && $_POST['card_ver'] == '02') ? '02' : '01';
+$pay_method_flag = isset($_POST['pay_method_flag']) ? $_POST['pay_method_flag'] : "";
 $taxsave_flag = isset($_POST['taxsave_flag']) ? $_POST['taxsave_flag'] : "";
 $payer_id = isset($_POST['payer_id']) ? $_POST['payer_id'] : "";
 $pay_work = isset($_POST['pay_work']) ? $_POST['pay_work'] : "PAY";
@@ -36,8 +37,8 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 	<title>Insert title here</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<!-- 서버별 페이플 국내결제 스크립트 추가 -->
-	<script src="https://democpay.payple.kr/js/v1/payment.js"></script> <!-- 테스트(TEST) -->
-	<!-- <script src="https://cpay.payple.kr/js/v1/payment.js"></script> --> <!-- 운영(REAL) -->
+	<script src="https://democpay.payple.kr/js/v1/payment.js?v=20250613090000"></script> <!-- 테스트(TEST) -->
+	<!-- <script src="https://cpay.payple.kr/js/v1/payment.js?v=20250613090000"></script> --> <!-- 운영(REAL) -->
 
 	<script>
 		$(document).ready(function() {
@@ -60,7 +61,7 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 				$form.submit();
 			};
 
-			// 결제 요청 
+			// 결제 요청
 			$('#payAction').on('click', function(event) {
 
 				var pay_type = "<?= $pay_type ?>";
@@ -78,6 +79,7 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 				var taxsave_flag = "<?= $taxsave_flag ?>";
 				var simple_flag = "<?= $simple_flag ?>";
 				var card_ver = "<?= $card_ver ?>";
+				var pay_method_flag = "<?= $pay_method_flag ?>";
 				var payer_authtype = "<?= $payer_authtype ?>";
 				var is_direct = "<?= $is_direct ?>";
 				var pcd_rst_url = "";
@@ -91,12 +93,19 @@ $is_direct = isset($_POST['is_direct']) ? $_POST['is_direct'] : "N";
 
 				/* 결제연동 파라미터 */
 
-				//DEFAULT SET 1 
+				//DEFAULT SET 1
 				obj.PCD_PAY_TYPE = pay_type; // (필수) 결제수단 (transfer|card)
 				obj.PCD_PAY_WORK = pay_work; // (필수) 결제요청 방식 (AUTH | PAY | CERT)
 
 				// 카드결제 시 필수 (카드 세부 결제방식)
-				if (pay_type == "card") obj.PCD_CARD_VER = card_ver; // Default: 01 (01: 간편/정기결제, 02: 앱카드)
+				if (pay_type == "card") {
+					obj.PCD_CARD_VER = card_ver; // Default: 01 (01: 간편/정기결제, 02: 앱카드)
+
+					// 앱카드(02) 선택 시 결제 수단 전송
+					if (card_ver == "02" && pay_method_flag != "") {
+						obj.PCD_PAY_METHOD = pay_method_flag; // (선택) 결제 수단 (appCard|naverPay|kakaoPay)
+					}
+				}
 
 				/* 결제요청 방식별(PCD_PAY_WORK) 파라미터 설정 */
 				/*
